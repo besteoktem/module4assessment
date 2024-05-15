@@ -15,6 +15,7 @@ summary(data)
 ###########################PROBLEMS WITH DATA, LETS CORRECT IT
 
 # Display the column names in the dataset
+
 colnames(data)
 
 # Splitting the data by semicolons
@@ -47,11 +48,6 @@ selected_shark_data <- shark_data[shark_data$`Shark.common.name` %in% shark_name
 # Display the first few rows of the new dataset
 head(selected_shark_data)
 
-selected_shark_data2 <- selected_shark_data %>% 
-  mutate(name_fact = as.factor(`Shark.common.name`)) %>%
-  mutate(namefact2 = fct_relevel(c("white shark", "tiger shark")))
-
-summary(selected_shark_data2$name_fact)
 
 # Create a bar plot
 ggplot(selected_shark_data2, aes(x = State, fill = `Shark.common.name`)) +
@@ -60,7 +56,34 @@ ggplot(selected_shark_data2, aes(x = State, fill = `Shark.common.name`)) +
        x = "State",
        y = "Count",
        fill = "Shark Common Name") +
- # scale_fill_brewer(palette = 1) +
+  # scale_fill_brewer(palette = 1) +
   scale_fill_manual(values = c( "brown","orange" , "white" )) +
   scale_y_continuous(breaks = seq(0, 300, by = 20)) 
 
+
+
+
+
+# Calculate the count of shark incidents per state
+state_counts <- selected_shark_data %>%
+  group_by(State) %>%
+  summarise(Count = n())
+
+# Arrange the data by Count in descending order
+state_counts <- state_counts[order(-state_counts$Count), ]
+
+# Reorder the State factor levels based on Count
+selected_shark_data$State <- factor(selected_shark_data$State, levels = state_counts$State)
+
+# Create a bar plot
+ggplot(selected_shark_data, aes(x = State, fill = `Shark.common.name`)) +
+  geom_bar() +
+  labs(title = "Shark Incidents by State",
+       x = "State",
+       y = "Count",
+       fill = "Shark Species") +
+  scale_fill_manual(values = c("brown", "orange", "white")) +
+  scale_y_continuous(breaks = seq(0, 300, by = 20)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels for better readability
+        legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8)) # Adjust the size of the legend text
