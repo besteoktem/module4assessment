@@ -11,6 +11,9 @@ data <- read.csv(file_path, header = TRUE, sep = ",", quote = "\"")
 # Display the structure of the data
 summary(data)
 
+
+###########################PROBLEMS WITH DATA, LETS CORRECT IT
+
 # Display the column names in the dataset
 colnames(data)
 
@@ -22,7 +25,22 @@ states <- sapply(data_split, function(x) x[4])
 shark_common_names <- sapply(data_split, function(x) x[5])
 
 # Creating a new data frame with the selected columns
-selected_data <- data.frame(State = states, `Shark common name` = shark_common_names)
+shark_data <- data.frame(State = states, `Shark common name` = shark_common_names)
 
 # Displaying the first few rows of the selected data
-head(selected_data)
+head(shark_data)
+
+#############################
+
+# Load the ggplot2 library
+library(ggplot2)
+
+# Create a bar plot
+ggplot(shark_data, aes(x = State, y = `Shark common name`)) +
+  geom_bar(colour= class) +
+  geom_smooth(se=FALSE) +
+  labs(title = "Shark Incidents by State",
+       x = "State",
+       y = "Shark Common Name"
+  )
+ 
