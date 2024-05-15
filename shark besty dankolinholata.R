@@ -63,3 +63,4 @@ ggplot(selected_shark_data2, aes(x = State, fill = `Shark.common.name`)) +
  # scale_fill_brewer(palette = 1) +
   scale_fill_manual(values = c( "brown","orange" , "white" )) +
   scale_y_continuous(breaks = seq(0, 300, by = 20)) 
+
