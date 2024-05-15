@@ -33,14 +33,33 @@ head(shark_data)
 #############################
 
 # Load the ggplot2 library
-library(ggplot2)
+library(tidyverse)
+
+# Check the column names in shark_data
+colnames(shark_data)
+
+# Define the shark common names of interest
+shark_names_of_interest <- c("white shark", "bull shark", "tiger shark")
+
+# Create a new dataset with selected shark common names
+selected_shark_data <- shark_data[shark_data$`Shark.common.name` %in% shark_names_of_interest, ]
+
+# Display the first few rows of the new dataset
+head(selected_shark_data)
+
+selected_shark_data2 <- selected_shark_data %>% 
+  mutate(name_fact = as.factor(`Shark.common.name`)) %>%
+  mutate(namefact2 = fct_relevel(c("white shark", "tiger shark")))
+
+summary(selected_shark_data2$name_fact)
 
 # Create a bar plot
-ggplot(shark_data, aes(x = State, y = `Shark common name`)) +
-  geom_bar(colour= class) +
-  geom_smooth(se=FALSE) +
+ggplot(selected_shark_data2, aes(x = State, fill = `Shark.common.name`)) +
+  geom_bar() +
   labs(title = "Shark Incidents by State",
        x = "State",
-       y = "Shark Common Name"
-  )
- 
+       y = "Count",
+       fill = "Shark Common Name") +
+ # scale_fill_brewer(palette = 1) +
+  scale_fill_manual(values = c( "brown","orange" , "white" )) +
+  scale_y_continuous(breaks = seq(0, 300, by = 20)) 
