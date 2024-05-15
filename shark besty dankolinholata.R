@@ -10,3 +10,19 @@ data <- read.csv(file_path, header = TRUE, sep = ",", quote = "\"")
 
 # Display the structure of the data
 summary(data)
+
+# Display the column names in the dataset
+colnames(data)
+
+# Splitting the data by semicolons
+data_split <- strsplit(data[, 1], ";")
+
+# Extracting State and Shark common name
+states <- sapply(data_split, function(x) x[4])
+shark_common_names <- sapply(data_split, function(x) x[5])
+
+# Creating a new data frame with the selected columns
+selected_data <- data.frame(State = states, `Shark common name` = shark_common_names)
+
+# Displaying the first few rows of the selected data
+head(selected_data)
